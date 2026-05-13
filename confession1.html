@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- 微信分享优化 -->
+    <meta name="description" content="💖 一份特别的告白，只想对你说 💖">
+    <meta property="og:title" content="💖 告白心动时刻 💖">
+    <meta property="og:description" content="有一份特别的心意想告诉你...">
+    <meta property="og:type" content="website">
+    
+    <title>💖 告白心动时刻 💖</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* 避免移动端长按菜单,但不影响体验 */
+            -webkit-tap-highlight-color: transparent;
+        }
+    
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #ff9a9e 0%, #fad0c4 45%, #fad0c4 100%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+    
+        /* 页面容器 */
+        .pages-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        .page {
+            position: absolute;
+            width: 100%;
+            max-width: 500px;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateX(100%) scale(0.8);
+            pointer-events: none;
+        }
+    
+        .page.active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: all;
+            position: relative;
+        }
+    
+        .page.prev {
+            opacity: 0;
+            transform: translateX(-100%) scale(0.8);
+        }
+
+        /* 漂浮爱心背景 */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 80, 120, 0.5);
+            font-size: 20px;
+            user-select: none;
+            animation: floatHeart linear infinite;
+            bottom: -50px;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(15deg);
+                opacity: 0;
+            }
+        }
+
+        /* 主卡片 */
+        .love-card {
+            position: relative;
+            z-index: 10;
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 248, 245, 0.92);
+            backdrop-filter: blur(8px);
+            border-radius: 64px 48px 80px 48px;
+            box-shadow: 0 30px 45px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            padding: 35px 25px 50px;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: cardGlow 2s infinite alternate;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* 通用卡片样式 */
+        .card {
+            position: relative;
+            z-index: 10;
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 248, 245, 0.92);
+            backdrop-filter: blur(8px);
+            border-radius: 64px 48px 80px 48px;
+            box-shadow: 0 30px 45px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            padding: 35px 25px 50px;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: cardGlow 2s infinite alternate;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes cardGlow {
+            0% {
+                box-shadow: 0 30px 45px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(255, 120, 160, 0.3) inset;
+            }
+            100% {
+                box-shadow: 0 35px 55px rgba(0, 0, 0, 0.25), 0 0 0 4px rgba(255, 80, 120, 0.5) inset;
+            }
+        }
+
+        /* 告白页图标 */
+        .heart-icon {
+            font-size: 50px;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.2));
+            margin-bottom: 10px;
+            animation: heartbeat 1.4s infinite ease-in-out;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.12); text-shadow: 0 0 8px #ff3366; }
+        }
+
+        /* 第三、四、五页通用图标样式 */
+        .page-icon {
+            font-size: 45px;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.2));
+            margin-bottom: 15px;
+            animation: floatIcon 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        /* 页面标题通用样式 */
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #e8436e;
+            margin: 15px 0;
+            letter-spacing: 2px;
+        }
+
+        /* 页面内容通用样式 */
+        .page-content {
+            background: #fffef7e6;
+            border-radius: 48px;
+            padding: 20px 18px;
+            margin: 20px 0;
+            text-align: left;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05), inset 0 1px 0 #fff;
+            border: 1px solid #ffccd5;
+        }
+
+        .page-content p {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #502c3a;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+
+        /* 名字编辑区域 */
+        .name-area {
+            background: rgba(255, 235, 220, 0.7);
+            border-radius: 60px;
+            padding: 8px 18px;
+            margin: 8px 0 15px;
+            display: inline-flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            justify-content: center;
+            gap: 8px;
+            backdrop-filter: blur(4px);
+            font-size: 1.2rem;
+        }
+
+        .name-tag {
+            font-weight: 600;
+            color: #c53a5f;
+        }
+
+        .editable-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: #ffffffcc;
+            padding: 4px 14px;
+            border-radius: 40px;
+            color: #b32d52;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #ffb7c3;
+        }
+
+        .editable-name span {
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .edit-pen {
+            font-size: 1rem;
+            background: #ff8da1;
+            color: white;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .editable-name:active .edit-pen {
+            background: #ff4d6d;
+            transform: scale(0.9);
+        }
+
+        /* 情书正文 */
+        .letter {
+            background: #fffef7e6;
+            border-radius: 48px;
+            padding: 20px 18px;
+            margin: 20px 0;
+            text-align: left;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05), inset 0 1px 0 #fff;
+            border: 1px solid #ffccd5;
+        }
+
+        .letter p {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #502c3a;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+
+        .big-question {
+            font-size: 1.9rem;
+            font-weight: 800;
+            text-align: center;
+            color: #e8436e;
+            margin: 18px 0 12px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 #ffe0e7;
+        }
+
+        /* 按钮区域 */
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 25px 0 15px;
+            flex-wrap: wrap;
+            position: relative;
+            min-height: 80px;
+        }
+
+        .btn {
+            border: none;
+            font-size: 1.6rem;
+            font-weight: bold;
+            padding: 12px 28px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+            background-color: white;
+            font-family: inherit;
+            min-width: 130px;
+            letter-spacing: 2px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-yes {
+            background: #ff5c8a;
+            color: white;
+            box-shadow: 0 6px 0 #aa2e4e;
+            border: 1px solid #ffb7cb;
+        }
+
+        .btn-yes:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #aa2e4e;
+        }
+
+        .btn-no {
+            background: #6c757d;
+            color: #fff0f0;
+            box-shadow: 0 6px 0 #3a3f44;
+            border: 1px solid #ced4da;
+            position: relative;
+        }
+
+        .btn-no:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #3a3f44;
+        }
+
+        /* 提示语 */
+        .hint-text {
+            font-size: 0.85rem;
+            color: #d45a7a;
+            background: #fff0f3cc;
+            border-radius: 50px;
+            padding: 6px 12px;
+            display: inline-block;
+            margin-top: 15px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* 选中后的庆祝覆盖区 */
+        .celebration-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 220, 230, 0.96);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            backdrop-filter: blur(12px);
+            animation: fadeIn 0.5s ease;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .celebration-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 70px;
+            max-width: 85%;
+            box-shadow: 0 40px 50px rgba(0,0,0,0.3);
+            animation: bouncePop 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+
+        .celebration-content h1 {
+            font-size: 2.2rem;
+            color: #f24c6e;
+            margin: 15px 0;
+        }
+
+        .celebration-content p {
+            font-size: 1.3rem;
+            color: #333;
+            margin: 15px 0;
+        }
+
+        .close-celebrate {
+            background: #ff6f91;
+            border: none;
+            padding: 12px 24px;
+            color: white;
+            font-size: 1rem;
+            border-radius: 40px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bouncePop {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 480px) {
+            .love-card {
+                padding: 24px 18px 32px;
+            }
+            .btn {
+                font-size: 1.3rem;
+                padding: 10px 20px;
+                min-width: 110px;
+            }
+            .big-question {
+                font-size: 1.6rem;
+            }
+            .letter p {
+                font-size: 0.95rem;
+            }
+            .editable-name span {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* no 按钮移动动画平滑 */
+        .smooth-move {
+            transition: transform 0.2s cubic-bezier(0.2, 1.2, 0.8, 1);
+        }
+
+        /* 小红晕 */
+        .spark {
+            position: fixed;
+            pointer-events: none;
+            font-size: 20px;
+            z-index: 200;
+            animation: sparkFly 0.8s ease-out forwards;
+        }
+
+        @keyframes sparkFly {
+            0% { transform: scale(0.2) translateY(0); opacity: 1; }
+            100% { transform: scale(1.2) translateY(-80px); opacity: 0; }
+        }
+
+        /* 翻页按钮 */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            border: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 12px 28px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
+            background-color: white;
+            font-family: inherit;
+            min-width: 130px;
+            letter-spacing: 2px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-next {
+            background: #ff8da1;
+            color: white;
+            box-shadow: 0 6px 0 #cc6677;
+            border: 1px solid #ffb7cb;
+        }
+
+        .nav-next:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #cc6677;
+        }
+
+        .nav-prev {
+            background: #6c757d;
+            color: #fff0f0;
+            box-shadow: 0 6px 0 #3a3f44;
+            border: 1px solid #ced4da;
+        }
+
+        .nav-prev:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #3a3f44;
+        }
+
+        /* 页面指示器 */
+        .page-indicator {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #d45a7a;
+            background: #fff0f3cc;
+            border-radius: 50px;
+            padding: 6px 12px;
+            display: inline-block;
+            backdrop-filter: blur(4px);
+        }
+
+        /* 第一页特殊样式 */
+        .intro-icon {
+            font-size: 50px;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.2));
+            margin-bottom: 15px;
+            animation: heartbeat 1.4s infinite ease-in-out;
+            display: inline-block;
+        }
+
+        .intro-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #e8436e;
+            margin: 15px 0;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 #ffe0e7;
+        }
+
+        .intro-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #502c3a;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+
+        /* 文本段落动画样式 */
+        .animated-paragraph {
+            opacity: 0;
+            transform: translateY(-30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 15px 0;
+            line-height: 1.8;
+            font-size: 1.25rem;
+        }
+
+        .animated-paragraph.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 第二页特殊样式 */
+        .story-icon {
+            font-size: 45px;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.2));
+            margin-bottom: 15px;
+            animation: floatIcon 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .story-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #e8436e;
+            margin: 15px 0;
+            letter-spacing: 2px;
+        }
+
+        .story-content {
+            background: #fffef7e6;
+            border-radius: 48px;
+            padding: 20px 18px;
+            margin: 20px 0;
+            text-align: left;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05), inset 0 1px 0 #fff;
+            border: 1px solid #ffccd5;
+        }
+
+        .story-content p {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #502c3a;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+
+        /* 第六页：证书样式 */
+        .certificate-card {
+            position: relative;
+            z-index: 10;
+            max-width: 500px;
+            width: 100%;
+            background: linear-gradient(135deg, #fff9f0 0%, #fff5f7 100%);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            box-shadow: 0 30px 45px rgba(0, 0, 0, 0.2), 0 0 0 3px rgba(255, 180, 200, 0.4) inset;
+            padding: 35px 25px 40px;
+            text-align: center;
+            animation: cardGlow 2s infinite alternate;
+            border: 2px solid #ffb7c3;
+        }
+
+        .certificate-header {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #e8436e;
+            margin-bottom: 25px;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 0 #ffe0e7;
+        }
+
+        /* 头像区域 */
+        .avatar-section {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .avatar-container {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #ffb7c3;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(255, 80, 120, 0.3);
+            background: white;
+            position: relative;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #ffe0e7 0%, #ffd6e0 100%);
+        }
+
+        .certificate-body {
+            background: white;
+            border-radius: 30px;
+            padding: 25px 20px;
+            margin: 20px 0;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+            border: 1px solid #ffd6e0;
+        }
+
+        .certificate-item {
+            margin: 18px 0;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: #502c3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .certificate-label {
+            font-weight: 700;
+            color: #c53a5f;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .certificate-value {
+            font-weight: 600;
+            color: #e8436e;
+            border-bottom: 2px dashed #ffb7c3;
+            padding: 2px 12px;
+            min-width: 120px;
+            display: inline-block;
+        }
+
+        .certificate-seal {
+            font-size: 3.5rem;
+            margin: 20px 0;
+            filter: drop-shadow(0 4px 8px rgba(255, 80, 120, 0.3));
+            animation: sealPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes sealPulse {
+            0%, 100% { transform: scale(1) rotate(-5deg); }
+            50% { transform: scale(1.05) rotate(5deg); }
+        }
+
+        .certificate-footer {
+            font-size: 0.95rem;
+            color: #d45a7a;
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        .highlight-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ff5c8a;
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 235, 220, 0.7);
+            border-radius: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="floating-hearts" id="floatingHearts"></div>
+
+<div class="pages-container">
+    <!-- 第一页：开场介绍 -->
+    <div class="page active" id="page1">
+        <div class="card">
+            <div class="intro-icon">💌✨</div>
+            <div class="intro-title">特别的浪漫想给你</div>
+            <div class="intro-text" id="introText">
+                <p class="animated-paragraph">🌸 每次见面总会忍不住与你贴近 🌸</p>
+                <p class="animated-paragraph">每次离别总会有万般不舍</p>
+                <p class="animated-paragraph">思念化成情话想顷刻向你诉述</p>
+                <p class="animated-paragraph">🌸我想抓住这此生仅有的机会向你吐露我的爱🌸</p>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn nav-next" id="nextToPage2">
+                    开始阅读 💕
+                </button>
+            </div>
+            <div class="page-indicator">第 1 页 / 共 5 页</div>
+        </div>
+    </div>
+
+    <!-- 第二页：故事回忆 -->
+    <div class="page" id="page2">
+        <div class="card">
+            <div class="story-icon">📖💭</div>
+            <div class="story-title">相遇</div>
+            <div class="story-content" id="storyContent">
+                <p class="animated-paragraph">🌟 网络姻缘将我们一线牵 🌟</p>
+                <p class="animated-paragraph">屏幕不但没有将我们隔开，反而使我们的联系更加紧密</p>
+                <p class="animated-paragraph">我在感叹如何有幸遇上这样的宝藏女孩</p>
+                <p class="animated-paragraph">🌟 而你也被我的温柔慢逐渐吸引 🌟</p>
+                <div class="highlight-text animated-paragraph">
+                    💖 我愿意为了你，成为最好的人 💖
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn nav-prev" id="backToPage1">
+                    上一页
+                </button>
+                <button class="nav-btn nav-next" id="nextToPage3">
+                    继续阅读 💗
+                </button>
+            </div>
+            <div class="page-indicator">第 2 页 / 共 5 页</div>
+        </div>
+    </div>
+
+    <!-- 第三页：美好承诺 -->
+    <div class="page" id="page3">
+        <div class="card">
+            <div class="page-icon">💝🌟</div>
+            <div class="page-title">相识</div>
+            <div class="page-content" id="page3Content">
+                <p class="animated-paragraph">💫 我想陪你走过春夏秋冬 💫</p>
+                <p class="animated-paragraph">看遍世间所有的美好风景。</p>
+                <p class="animated-paragraph">在你开心时与你分享，在你难过时给你拥抱。</p>
+                <p class="animated-paragraph">无论风雨还是晴天，我都会一直在你身边。</p>
+                <div class="highlight-text animated-paragraph">
+                    🌈 你就是我生命中最美的彩虹 🌈
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn nav-prev" id="backToPage2">
+                    上一页
+                </button>
+                <button class="nav-btn nav-next" id="nextToPage4">
+                    继续阅读 💗
+                </button>
+            </div>
+            <div class="page-indicator">第 3 页 / 共 5 页</div>
+        </div>
+    </div>
+
+    <!-- 第四页：未来期许 -->
+    <div class="page" id="page4">
+        <div class="card">
+            <div class="page-icon">🌸✨</div>
+            <div class="page-title">我们的未来</div>
+            <div class="page-content" id="page4Content">
+                <p class="animated-paragraph">🎀 想象一下我们的未来 🎀</p>
+                <p class="animated-paragraph">一起做饭、一起旅行、一起看电影。</p>
+                <p class="animated-paragraph">在每一个平凡的日子里，创造属于我们的回忆。</p>
+                <p class="animated-paragraph">我想和你一起变老，直到白发苍苍。</p>
+                <div class="highlight-text animated-paragraph">
+                    💕 余生很长，只想和你慢慢走 💕
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn nav-prev" id="backToPage3">
+                    上一页
+                </button>
+                <button class="nav-btn nav-next" id="nextToPage5">
+                    最后一步 💖
+                </button>
+            </div>
+            <div class="page-indicator">第 4 页 / 共 5 页</div>
+        </div>
+    </div>
+
+    <!-- 第五页：告白页面（原页面） -->
+    <div class="page" id="page5">
+        <div class="love-card" id="loveCard">
+            <div class="heart-icon">💖💕</div>
+
+            <!-- 可编辑昵称区域 表白对象与自己的名字 -->
+            <div class="name-area">
+                <span class="name-tag">💌 致</span>
+                <div class="editable-name" id="editTargetBtn">
+                    <span id="targetNameDisplay">Iris</span>
+                    <div class="edit-pen">✏️</div>
+                </div>
+            </div>
+
+            <div class="letter" id="letterContent">
+                <p class="animated-paragraph">✨ 遇见你的那天，连空气都是甜的 ✨</p>
+                <p class="animated-paragraph">🌹 你的笑容像星光一样，每一次想起都会心跳加速。我想成为那个陪你三餐四季、看遍山海的人，把你的手给我，好吗？</p>
+                <div class="big-question animated-paragraph">💗 你愿意和我在一起吗？💗</div>
+            </div>
+
+            <div class="buttons" id="buttonContainer">
+                <button class="btn btn-yes" id="yesBtn">💞 愿意 💞</button>
+                <button class="btn btn-no" id="noBtn">😢 不愿意 😢</button>
+            </div>
+            <div class="hint-text" id="hintMsg">🌸 点一点「不愿意」也许会有小魔法哦～ 🌸</div>
+        </div>
+    </div>
+
+    <!-- 第六页：女朋友证书 -->
+    <div class="page" id="page6">
+        <div class="certificate-card">
+            <div class="certificate-header">💝 女朋友证 💝</div>
+            
+            <!-- 头像区域 -->
+            <div class="avatar-section">
+                <div class="avatar-container" id="avatarContainer">
+                    <div class="avatar-placeholder" id="avatarPlaceholder">👩</div>
+                    <img class="avatar-img" id="avatarImg" style="display: none;" alt="头像">
+                </div>
+            </div>
+            
+            <div class="certificate-body">
+                <div class="certificate-item">
+                    <span class="certificate-label">持证人：</span>
+                    <span class="certificate-value" id="certName">Iris</span>
+                </div>
+                <div class="certificate-item">
+                    <span class="certificate-label">职业：</span>
+                    <span class="certificate-value" id="certJob">💗我的专属女友💗</span>
+                </div>
+                <div class="certificate-item">
+                    <span class="certificate-label">发证人：</span>
+                    <span class="certificate-value" id="certSender">陈兆基</span>
+                </div>
+                <div class="certificate-item">
+                    <span class="certificate-label">发证日期：</span>
+                    <span class="certificate-value" id="certDate"></span>
+                </div>
+            </div>
+
+            <div class="certificate-seal">💕</div>
+            
+            <div class="certificate-footer">
+                此证永久有效 · 余生请多指教
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn nav-next" id="restartBtn" style="background: #ff8da1;">
+                    🔄 重新开始
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function(){
+        // ---------- 浪漫配置 ----------
+        let targetName = "Iris";     // 对方昵称
+        let myName = "爱你的我";        // 保留备用可显示
+        // 是否已经答应（防止重复触发）
+        let isAccepted = false;
+
+        // DOM 元素
+        const targetNameSpan = document.getElementById('targetNameDisplay');
+        const editTargetBtn = document.getElementById('editTargetBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const hintDiv = document.getElementById('hintMsg');
+        const loveCard = document.getElementById('loveCard');
+        
+        // 翻页相关元素
+        const page1 = document.getElementById('page1');
+        const page2 = document.getElementById('page2');
+        const page3 = document.getElementById('page3');
+        const page4 = document.getElementById('page4');
+        const page5 = document.getElementById('page5');
+        const page6 = document.getElementById('page6');
+        const nextToPage2Btn = document.getElementById('nextToPage2');
+        const backToPage1Btn = document.getElementById('backToPage1');
+        const nextToPage3Btn = document.getElementById('nextToPage3');
+        const backToPage2Btn = document.getElementById('backToPage2');
+        const nextToPage4Btn = document.getElementById('nextToPage4');
+        const backToPage3Btn = document.getElementById('backToPage3');
+        const nextToPage5Btn = document.getElementById('nextToPage5');
+        const restartBtn = document.getElementById('restartBtn');
+        
+        let currentPage = 1;
+
+        // 拒绝按钮的移动逻辑所需变量
+        let noBtnMoveCount = 0;   // 移动次数用于改变台词
+        let moveTimeout = null;
+
+        // 初始化显示对方名字
+        function updateNameUI() {
+            targetNameSpan.innerText = targetName;
+        }
+
+        // 编辑名字(弹出友好提示)
+        function editTargetName() {
+            if(isAccepted) return;
+            let newName = prompt("💖 你心中那个TA的昵称是？ 💖", targetName);
+            if(newName && newName.trim() !== "") {
+                targetName = newName.trim().substring(0, 12);
+                updateNameUI();
+                // 顺便也改一下情书感召 (非必须 增加一点小甜度)
+                const bigQ = document.querySelector('.big-question');
+                if(bigQ) bigQ.innerHTML = `💗 ${targetName}，你愿意和我在一起吗？💗`;
+                showFloatingTip(`✨ 给${targetName}的告白更甜了 ✨`, 1500);
+            } else if(newName === "") {
+                // 无操作
+            }
+        }
+
+        // 浮动提示小工具（短暂通知）
+        function showFloatingTip(msg, duration = 1800) {
+            let tip = document.createElement('div');
+            tip.innerText = msg;
+            tip.style.position = 'fixed';
+            tip.style.bottom = '30%';
+            tip.style.left = '50%';
+            tip.style.transform = 'translateX(-50%)';
+            tip.style.backgroundColor = '#ff8ba0';
+            tip.style.color = 'white';
+            tip.style.padding = '8px 18px';
+            tip.style.borderRadius = '50px';
+            tip.style.fontSize = '0.9rem';
+            tip.style.fontWeight = 'bold';
+            tip.style.zIndex = '1000';
+            tip.style.whiteSpace = 'nowrap';
+            tip.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+            tip.style.backdropFilter = 'blur(4px)';
+            tip.style.pointerEvents = 'none';
+            document.body.appendChild(tip);
+            setTimeout(() => tip.remove(), duration);
+        }
+
+        // 生成随机范围内的偏移（让拒绝按钮调皮移动）
+        function getRandomOffset(btn, parentContainer) {
+            if(!parentContainer) return {dx: 0, dy: 0};
+            const btnRect = btn.getBoundingClientRect();
+            const parentRect = parentContainer.getBoundingClientRect();
+            const winWidth = window.innerWidth;
+            const winHeight = window.innerHeight;
+
+            // 允许偏移范围 相对父容器内部偏移最多±70px，但保证不飞太离谱
+            let maxOffsetX = Math.min(100, parentRect.width / 2.5);
+            let maxOffsetY = Math.min(80, parentRect.height / 2);
+            // 确保按钮还在视野内靠近中心区域，不让它消失太偏
+            let dx = (Math.random() - 0.5) * maxOffsetX * 1.8;
+            let dy = (Math.random() - 0.5) * maxOffsetY * 1.5;
+
+            // 避免按钮超出可视区太远，粗略修正
+            const futureLeft = btnRect.left + dx;
+            const futureRight = btnRect.right + dx;
+            const futureTop = btnRect.top + dy;
+            const futureBottom = btnRect.bottom + dy;
+            if(futureLeft < 5) dx = dx + (5 - futureLeft);
+            if(futureRight > winWidth - 5) dx = dx - (futureRight - winWidth + 5);
+            if(futureTop < 40) dy = dy + (40 - futureTop);
+            if(futureBottom > winHeight - 30) dy = dy - (futureBottom - winHeight + 30);
+            return {dx, dy};
+        }
+
+        // 移动“不愿意”按钮 (滑稽逃跑)
+        function moveNoButton() {
+            if(isAccepted) return;
+            if(!noBtn) return;
+            const container = document.getElementById('buttonContainer');
+            if(!container) return;
+            // 清除之前的transform动画 先重置再移动避免叠加
+            noBtn.style.transition = 'transform 0.25s cubic-bezier(0.34, 1.2, 0.64, 1)';
+            const {dx, dy} = getRandomOffset(noBtn, container);
+            noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+            // 增加调皮小提示
+            const tips = [
+                "😝 点不到～点不到～",
+                "💢 不许拒绝我！",
+                "🥺 你真的舍得拒绝吗？",
+                "✨ 再给你一次机会，点愿意呀~",
+                "❤️ 我超可爱的，再想想？",
+                "😘 你逃不出我的手掌心～"
+            ];
+            let randomTip = tips[Math.floor(Math.random() * tips.length)];
+            hintDiv.innerHTML = `💘 ${randomTip} 💘`;
+            setTimeout(() => {
+                if(!isAccepted) hintDiv.innerHTML = '🌸 点一点「不愿意」会有小魔法，最终只能点「愿意」哦～ 🌸';
+            }, 1800);
+            // 额外触发一个小爱心特效在按钮位置
+            createMiniHeart(noBtn);
+        }
+
+        // 产生小爱心特效
+        function createMiniHeart(element) {
+            if(!element) return;
+            const rect = element.getBoundingClientRect();
+            const heartSpan = document.createElement('div');
+            heartSpan.innerText = '💔';
+            heartSpan.style.position = 'fixed';
+            heartSpan.style.left = rect.left + rect.width/2 - 10 + 'px';
+            heartSpan.style.top = rect.top - 10 + 'px';
+            heartSpan.style.fontSize = '28px';
+            heartSpan.style.pointerEvents = 'none';
+            heartSpan.style.zIndex = '999';
+            heartSpan.style.opacity = '0.9';
+            heartSpan.style.transition = 'all 0.5s ease';
+            document.body.appendChild(heartSpan);
+            setTimeout(() => {
+                heartSpan.style.transform = 'translateY(-40px) scale(1.3)';
+                heartSpan.style.opacity = '0';
+                setTimeout(() => heartSpan.remove(), 500);
+            }, 20);
+        }
+
+        // 点击YES后的盛大庆祝 + 浪漫情书结局
+        function celebrateLove() {
+            if(isAccepted) return;
+            isAccepted = true;
+            
+            // 隐藏原有的按钮区域
+            const buttonsDiv = document.querySelector('.buttons');
+            if(buttonsDiv) buttonsDiv.style.display = 'none';
+            
+            // 隐藏提示文本
+            if(hintDiv) hintDiv.style.display = 'none';
+
+            // 全屏庆祝面板
+            const overlay = document.createElement('div');
+            overlay.className = 'celebration-overlay';
+            overlay.innerHTML = `
+                <div class="celebration-content">
+                    <div style="font-size: 4rem;">💗🎉💗</div>
+                    <h1>我们在一起啦！ 💖</h1>
+                    <p>✨ 亲爱的 ${targetName} ✨</p>
+                    <p>❤️ 谢谢你给我爱你的机会 ❤️</p>
+                    <p>往后余生，每一天都是糖炒栗子和星光 🌟</p>
+                    <p>💞 我会一直一直对你好 💞</p>
+                    <button class="close-celebrate" id="closeCelebrateBtn">💕 永远珍藏这份心动 💕</button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            // 撒花 彩带效果（简易但效果爆炸）
+            for(let i=0; i<150; i++) {
+                createConfetti();
+            }
+            // 持续爱心雨增量
+            let heartRainInterval = setInterval(() => {
+                if(!document.body.contains(overlay)) {
+                    clearInterval(heartRainInterval);
+                    return;
+                }
+                for(let s=0; s<5; s++) createFloatingHeartBurst();
+            }, 400);
+
+            // 关闭庆祝面板 同时保留浪漫氛围
+            const closeBtn = document.getElementById('closeCelebrateBtn');
+            if(closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    overlay.remove();
+                    clearInterval(heartRainInterval);
+                    // 最后卡片呈现最终甜蜜模式
+                    loveCard.style.animation = "none";
+                    const letterDiv = document.querySelector('.letter');
+                    if(letterDiv) {
+                        letterDiv.innerHTML = `
+                            <p style="text-align:center; font-size:1.4rem; margin-top:15px;">🎀 故事的开始，是你我相视一笑 🎀</p>
+                            <p style="text-align:center; font-size:1.4rem; margin-top:15px;">💌 从今天起，我们就是彼此的全世界 💌</p>
+                            <p style="text-align:center; font-size:1.4rem; margin-top:15px;">❤️ I LOVE YOU, ${targetName} ❤️</p>
+                        `;
+                    }
+                    const bigQ = document.querySelector('.big-question');
+                    if(bigQ) bigQ.innerHTML = `✨ 已锁定 · 余生是你 ✨`;
+                    
+                    // 显示新的提示语
+                    hintDiv.style.display = 'inline-block';
+                    hintDiv.innerHTML = `💘 每天都要对${targetName}说一万遍爱你 💘`;
+
+                    // 添加查看证书按钮
+                    setTimeout(() => {
+                        const viewCertBtn = document.createElement('button');
+                        viewCertBtn.className = 'btn btn-yes';
+                        viewCertBtn.innerHTML = '💌 查看女朋友证 💌';
+                        viewCertBtn.style.marginTop = '20px';
+                        viewCertBtn.style.cursor = 'pointer';
+                        viewCertBtn.onclick = function() {
+                            goToPage(6);
+                        };
+                        if(buttonsDiv) {
+                            buttonsDiv.style.display = 'flex';
+                            buttonsDiv.innerHTML = ''; // 清空原有按钮
+                            buttonsDiv.appendChild(viewCertBtn);
+                        }
+                    }, 500);
+                });
+            }
+            // 附加背景大爱心持续飘落
+        }
+
+        // 简单的彩带块（模拟confetti）
+        function createConfetti() {
+            const colors = ['#ff4d6d', '#ff8fa3', '#ffb3c6', '#ffc2d1', '#fbc4c0', '#ff9e7a'];
+            const conf = document.createElement('div');
+            conf.style.position = 'fixed';
+            conf.style.width = Math.random() * 8 + 5 + 'px';
+            conf.style.height = Math.random() * 8 + 6 + 'px';
+            conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            conf.style.left = Math.random() * window.innerWidth + 'px';
+            conf.style.top = '-20px';
+            conf.style.borderRadius = '50%';
+            conf.style.opacity = '0.9';
+            conf.style.pointerEvents = 'none';
+            conf.style.zIndex = '1001';
+            conf.style.transform = `rotate(${Math.random() * 360}deg)`;
+            document.body.appendChild(conf);
+            let fall = 0;
+            const interval = setInterval(() => {
+                if(!conf.parentNode || fall > 100) {
+                    clearInterval(interval);
+                    if(conf && conf.remove) conf.remove();
+                    return;
+                }
+                let topVal = parseFloat(conf.style.top);
+                conf.style.top = topVal + 5 + Math.random() * 4 + 'px';
+                conf.style.left = parseFloat(conf.style.left) + (Math.random() - 0.5) * 6 + 'px';
+                fall++;
+                if(topVal > window.innerHeight) {
+                    clearInterval(interval);
+                    conf.remove();
+                }
+            }, 20);
+            setTimeout(() => {
+                if(conf && conf.remove) conf.remove();
+                clearInterval(interval);
+            }, 3000);
+        }
+
+        // 心跳爆炸爱心
+        function createFloatingHeartBurst() {
+            const heart = document.createElement('div');
+            heart.innerText = '❤️';
+            heart.style.position = 'fixed';
+            heart.style.fontSize = Math.random() * 20 + 18 + 'px';
+            heart.style.left = Math.random() * window.innerWidth + 'px';
+            heart.style.bottom = '-20px';
+            heart.style.color = `rgba(255, 80, 120, ${Math.random() * 0.8 + 0.4})`;
+            heart.style.pointerEvents = 'none';
+            heart.style.zIndex = '99';
+            heart.style.transition = 'all 3s linear';
+            document.body.appendChild(heart);
+            let pos = 0;
+            const animate = setInterval(() => {
+                if(!heart.parentNode) { clearInterval(animate); return; }
+                pos += 2;
+                heart.style.transform = `translateY(-${pos}px) rotate(${pos/5}deg)`;
+                if(pos > window.innerHeight + 100) {
+                    clearInterval(animate);
+                    heart.remove();
+                }
+            }, 25);
+        }
+
+        // 永久浮动爱心背景生成器
+        function startFloatingBackground() {
+            const heartsContainer = document.getElementById('floatingHearts');
+            setInterval(() => {
+                if(isAccepted) {
+                    // 答应之后更多爱心
+                    for(let i=0;i<3;i++) generateHeart(heartsContainer);
+                } else {
+                    generateHeart(heartsContainer);
+                }
+            }, 700);
+        }
+
+        function generateHeart(container) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            const size = Math.random() * 20 + 14;
+            heart.style.fontSize = size + 'px';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = Math.random() * 5 + 6 + 's';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            const heartSymbols = ['❤️', '💖', '💗', '💓', '💕', '💞', '🌸', '🌹', '✨'];
+            heart.innerText = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            heart.style.opacity = Math.random() * 0.5 + 0.2;
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 13000);
+        }
+
+        // 为拒绝按钮添加 狡猾的事件守卫 (click逃跑)
+        function bindNoButtonEscape() {
+            noBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if(isAccepted) return;
+                // 每次点击 拒绝，移动按钮 并且弹出哭笑不得
+                moveNoButton();
+                // 增加小震动反馈提示
+                noBtnCountEffect();
+                // 额外增加爱心暴击
+                createMiniHeart(noBtn);
+                // 播放可爱提示
+                if(noBtnMoveCount % 3 === 2) {
+                    showFloatingTip(`😜 ${targetName} 你点不到不情愿～ ❤️`, 1000);
+                }
+                noBtnMoveCount++;
+                if(noBtnMoveCount >= 5) {
+                    hintDiv.innerHTML = "💢 哼哼，拒绝按钮已经被爱神封印啦，快点击「愿意」抱走我吧！ 💢";
+                }
+            });
+        }
+
+        function noBtnCountEffect() {
+            // 随机换一下hint调皮话
+            const angryLove = ["🥺 别拒绝我嘛..", "💗 你忍心让我难过吗", "✨ 命中注定就是你啦", "🎀 我愿意用一生宠你", "🌸 靠近一点点，点愿意呀"];
+            const idx = Math.floor(Math.random() * angryLove.length);
+            hintDiv.innerHTML = `😘 ${angryLove[idx]} 😘`;
+            setTimeout(() => {
+                if(!isAccepted && noBtnMoveCount < 8) hintDiv.innerHTML = '🌸 点一点「不愿意」会有小魔法，最终只能点「愿意」哦～ 🌸';
+            }, 1500);
+        }
+
+        // 答应按钮绑定大事记
+        function bindYesButton() {
+            yesBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if(isAccepted) return;
+                // 最终告白
+                celebrateLove();
+            });
+        }
+
+        // 编辑名字的点击事件
+        function bindEditEvents() {
+            editTargetBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if(isAccepted) return;
+                editTargetName();
+            });
+        }
+
+        // 重置拒绝按钮的初始偏移(保证初始正常)
+        function resetNoBtnPosition() {
+            noBtn.style.transform = 'translate(0,0)';
+            noBtn.style.transition = 'none';
+        }
+
+        // 设置证书内容
+        function setupCertificate() {
+            // ========== 后台配置区域 ==========
+            // 修改这里的图片路径来更换头像
+            // 可以使用本地路径如: 'images/avatar.jpg'
+            // 或者网络图片URL如: 'https://example.com/avatar.png'
+            const AVATAR_IMAGE_URL = 'image/20230410_S00028_P04_C04_L04_20230410151250.bmp'; // 在此处填入头像图片路径，留空则显示默认emoji
+            // ===================================
+            
+            // 设置头像
+            const avatarImg = document.getElementById('avatarImg');
+            const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+            
+            if(AVATAR_IMAGE_URL && AVATAR_IMAGE_URL.trim() !== '') {
+                // 如果有配置图片URL，显示图片
+                avatarImg.src = AVATAR_IMAGE_URL;
+                avatarImg.style.display = 'block';
+                avatarPlaceholder.style.display = 'none';
+                
+                // 图片加载失败时显示默认emoji
+                avatarImg.onerror = function() {
+                    avatarImg.style.display = 'none';
+                    avatarPlaceholder.style.display = 'flex';
+                };
+            } else {
+                // 没有配置图片，显示默认emoji
+                avatarImg.style.display = 'none';
+                avatarPlaceholder.style.display = 'flex';
+            }
+            
+            // 设置姓名
+            const certName = document.getElementById('certName');
+            if(certName) {
+                certName.textContent = targetName;
+            }
+            
+            // 设置发证日期（当前日期）
+            const certDate = document.getElementById('certDate');
+            if(certDate) {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                certDate.textContent = `${year}年${month}月${day}日`;
+            }
+        }
+
+        // 文本动画控制函数
+        function animateParagraphs(containerId, delay = 200) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const paragraphs = container.querySelectorAll('.animated-paragraph');
+            paragraphs.forEach((p, index) => {
+                setTimeout(() => {
+                    p.classList.add('visible');
+                }, index * delay);
+            });
+        }
+
+        // 重置文本动画状态
+        function resetParagraphAnimations(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const paragraphs = container.querySelectorAll('.animated-paragraph');
+            paragraphs.forEach(p => {
+                p.classList.remove('visible');
+            });
+        }
+
+        // 翻页功能
+        function goToPage(pageNum) {
+            if (pageNum === currentPage) return;
+            
+            // 移除所有页面的active和prev类
+            [page1, page2, page3, page4, page5, page6].forEach(page => {
+                page.classList.remove('active', 'prev');
+            });
+            
+            // 设置当前页之前的页面为prev状态
+            for (let i = 1; i < pageNum; i++) {
+                const prevPage = document.getElementById(`page${i}`);
+                if (prevPage) prevPage.classList.add('prev');
+            }
+            
+            // 激活目标页面
+            const targetPage = document.getElementById(`page${pageNum}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            currentPage = pageNum;
+            
+            // 根据页面触发对应的文本动画
+            setTimeout(() => {
+                switch(pageNum) {
+                    case 1:
+                        resetParagraphAnimations('introText');
+                        animateParagraphs('introText', 800);
+                        break;
+                    case 2:
+                        resetParagraphAnimations('storyContent');
+                        animateParagraphs('storyContent', 800);
+                        break;
+                    case 3:
+                        resetParagraphAnimations('page3Content');
+                        animateParagraphs('page3Content', 800);
+                        break;
+                    case 4:
+                        resetParagraphAnimations('page4Content');
+                        animateParagraphs('page4Content', 800);
+                        break;
+                    case 5:
+                        resetParagraphAnimations('letterContent');
+                        animateParagraphs('letterContent', 800);
+                        // 确保告白页的动画正常运行
+                        createFloatingHeartBurst();
+                        break;
+                    case 6:
+                        // 设置证书内容
+                        setupCertificate();
+                        break;
+                }
+            }, 100);
+        }
+
+        // 绑定翻页按钮事件
+        function bindNavigationButtons() {
+            if (nextToPage2Btn) {
+                nextToPage2Btn.addEventListener('click', () => {
+                    goToPage(2);
+                });
+            }
+            
+            if (backToPage1Btn) {
+                backToPage1Btn.addEventListener('click', () => {
+                    goToPage(1);
+                });
+            }
+            
+            if (nextToPage3Btn) {
+                nextToPage3Btn.addEventListener('click', () => {
+                    goToPage(3);
+                });
+            }
+            
+            if (backToPage2Btn) {
+                backToPage2Btn.addEventListener('click', () => {
+                    goToPage(2);
+                });
+            }
+            
+            if (nextToPage4Btn) {
+                nextToPage4Btn.addEventListener('click', () => {
+                    goToPage(4);
+                });
+            }
+            
+            if (backToPage3Btn) {
+                backToPage3Btn.addEventListener('click', () => {
+                    goToPage(3);
+                });
+            }
+            
+            if (nextToPage5Btn) {
+                nextToPage5Btn.addEventListener('click', () => {
+                    goToPage(5);
+                });
+            }
+            
+            if (restartBtn) {
+                restartBtn.addEventListener('click', () => {
+                    location.reload();
+                });
+            }
+        }
+
+        // 启动所有&额外 制造初始浪漫爱心雨
+        function init() {
+            updateNameUI();
+            bindNoButtonEscape();
+            bindYesButton();
+            bindEditEvents();
+            bindNavigationButtons();
+            resetNoBtnPosition();
+            startFloatingBackground();
+            // 让情书最开始就带有对方名字
+            const bigQ = document.querySelector('.big-question');
+            if(bigQ) bigQ.innerHTML = `💗 ${targetName}，你愿意和我在一起吗？💗`;
+            // 温柔加载10颗飘浮心
+            for(let i=0;i<15;i++) {
+                setTimeout(() => {
+                    if(!isAccepted) generateHeart(document.getElementById('floatingHearts'));
+                }, i*200);
+            }
+            // 初始化第一页的文本动画
+            setTimeout(() => {
+                animateParagraphs('introText', 800);
+            }, 500);
+            // 增加温柔心跳
+        }
+
+        init();
+    })();
+</script>
+</body>
+</html>
