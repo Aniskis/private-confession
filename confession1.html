@@ -196,7 +196,7 @@
         }
 
         .page-content p {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.8;
             color: #502c3a;
             margin-bottom: 14px;
@@ -276,7 +276,7 @@
         }
 
         .letter p {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.8;
             color: #502c3a;
             margin-bottom: 14px;
@@ -546,7 +546,7 @@
         }
 
         .intro-text {
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             line-height: 1.8;
             color: #502c3a;
             margin: 16px 0;
@@ -560,7 +560,7 @@
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             margin: 12px 0;
             line-height: 1.8;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             text-align: center;
         }
 
@@ -603,7 +603,7 @@
         }
 
         .story-content p {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.8;
             color: #502c3a;
             margin-bottom: 14px;
@@ -1092,7 +1092,7 @@
             overlay.className = 'celebration-overlay';
             overlay.innerHTML = `
                 <div class="celebration-content">
-                    <div style="font-size: 4rem;">💗🎉💗</div>
+                    <div style="font-size: 38px;">💗🎉💗</div>
                     <h1>💖 我们在一起啦！ 💖</h1>
                     <p>✨ 亲爱的 ${targetName} ✨</p>
                     <p>❤️ 我会永远记住这一刻 ❤️</p>
@@ -1112,8 +1112,8 @@
                     clearInterval(heartRainInterval);
                     return;
                 }
-                for(let s=0; s<5; s++) createFloatingHeartBurst();
-            }, 400);
+                for(let s=0; s<2; s++) createFloatingHeartBurst();
+            }, 800);
 
             // 关闭庆祝面板 同时保留浪漫氛围
             const closeBtn = document.getElementById('closeCelebrateBtn');
@@ -1126,11 +1126,11 @@
                     const letterDiv = document.querySelector('.letter');
                     if(letterDiv) {
                         letterDiv.innerHTML = `
-                            <p style="text-align:center; font-size:1.4rem; margin-top:15px;">🎀 从今天起，我们就是彼此的全世界 🎀</p>
-                            <p style="text-align:center; font-size:1.4rem; margin-top:15px;">💌 你的心情我会好好接住 💌</p>
-                            <p style="text-align:center; font-size:1.4rem; margin-top:15px;">✨ 你的感情我会好好呵护 ✨</p>
-                            <p style="text-align:center; font-size:1.4rem; margin-top:15px;">🌹 不再俗套的说爱，而是用行动诠释爱 🌹</p>
-                            <p style="text-align:center; font-size:1.4rem; margin-top:15px;">❤️ NICE TO MEET YOU, ${targetName} ❤️</p>
+                            <p style="text-align:center; font-size:1.1rem; margin-top:15px;">🎀 从今天起，我们就是彼此的全世界 🎀</p>
+                            <p style="text-align:center; font-size:1.1rem; margin-top:15px;">💌 你的心情我会好好接住 💌</p>
+                            <p style="text-align:center; font-size:1.1rem; margin-top:15px;">✨ 你的感情我会好好呵护 ✨</p>
+                            <p style="text-align:center; font-size:1.1rem; margin-top:15px;">🌹 不再俗套的说爱，而是用行动诠释爱 🌹</p>
+                            <p style="text-align:center; font-size:1.1rem; margin-top:15px;">❤️ NICE TO MEET YOU, ${targetName} ❤️</p>
                         `;
                     }
                     const bigQ = document.querySelector('.big-question');
