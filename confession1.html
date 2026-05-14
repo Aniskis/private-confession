@@ -10,7 +10,7 @@
     <meta property="og:description" content="有一份特别的心意想告诉你...">
     <meta property="og:type" content="website">
     
-    <title>💖 title</title>
+    <title>💖独特的浪漫💖</title>
     <style>
         * {
             margin: 0;
@@ -22,15 +22,16 @@
     
         body {
             min-height: 100vh;
+            max-height: 100vh;
             background: linear-gradient(145deg, #ff9a9e 0%, #fad0c4 45%, #fad0c4 100%);
             background-attachment: fixed;
             font-family: 'Segoe UI', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
             position: relative;
-            overflow-x: hidden;
+            overflow: hidden;
         }
     
         /* 页面容器 */
@@ -38,7 +39,8 @@
             position: relative;
             width: 100%;
             max-width: 500px;
-            height: 100vh;
+            height: calc(100vh - 30px);
+            max-height: 900px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -108,11 +110,12 @@
             backdrop-filter: blur(8px);
             border-radius: 64px 48px 80px 48px;
             box-shadow: 0 30px 45px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-            padding: 30px 20px 40px;
+            padding: 25px 18px 35px;
             text-align: center;
             transition: all 0.3s ease;
             animation: cardGlow 2s infinite alternate;
-            min-height: 420px;
+            min-height: 380px;
+            max-height: calc(100vh - 60px);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -128,11 +131,12 @@
             backdrop-filter: blur(8px);
             border-radius: 64px 48px 80px 48px;
             box-shadow: 0 30px 45px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-            padding: 30px 20px 40px;
+            padding: 25px 18px 35px;
             text-align: center;
             transition: all 0.3s ease;
             animation: cardGlow 2s infinite alternate;
-            min-height: 420px;
+            min-height: 380px;
+            max-height: calc(100vh - 60px);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -742,7 +746,7 @@
     <div class="page active" id="page1">
         <div class="card">
             <div class="intro-icon">💌✨</div>
-            <div class="intro-title">独有的浪漫献给你</div>
+            <div class="intro-title">独占你的思绪无法抑止</div>
             <div class="intro-text" id="introText">
                 <p class="animated-paragraph">🌸 每次见面总会忍不住与你贴近 🌸</p>
                 <p class="animated-paragraph">每次离别总会有万般不舍</p>
